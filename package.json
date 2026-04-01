@@ -1,0 +1,34 @@
+{
+  "name": "openclaw-context-engine",
+  "version": "1.0.0",
+  "description": "Context Engineering 智能路由系统 - 分层记忆 + 动态加载 + 自适应优化",
+  "main": "tools/router.js",
+  "bin": {
+    "context-engine": "tools/router.js"
+  },
+  "scripts": {
+    "test": "node tools/router.js test",
+    "route": "node tools/router.js route",
+    "stats": "node tools/router.js stats",
+    "install": "bash install.sh"
+  },
+  "keywords": [
+    "openclaw",
+    "context-engineering",
+    "ai-agent",
+    "memory",
+    "routing",
+    "intelligent"
+  ],
+  "author": "Yemin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yemin/openclaw-context-engine"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
