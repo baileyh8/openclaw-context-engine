@@ -2,9 +2,48 @@
 
 > 基于 Context Engineering 方法论的 OpenClaw 智能路由系统
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yemin/openclaw-context-engine)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/baileyh8/openclaw-context-engine)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)](https://nodejs.org/)
+
+---
+
+## 📝 项目简介
+
+**Context Engine** 是一个基于 Context Engineering 方法论设计的智能路由系统，专门为 AI Agent 提供高效的上下文管理解决方案。
+
+### 🎯 解决什么问题？
+
+当你使用 AI Agent 时，是否遇到过这些问题？
+- ❌ 每次对话 AI 都像"失忆"一样，不记得之前聊过什么
+- ❌ AGENTS.md 文件越写越长，Token 消耗巨大
+- ❌ 上下文无限膨胀，响应越来越慢
+- ❌ 重复问题无法识别，AI 总是在犯同样的错误
+
+### 💡 我们的方案
+
+**Context Engine** 通过四层记忆架构 + 智能路由引擎，让 AI Agent 能够：
+
+- ✅ **智能记忆召回**：检测到"又"、"上次"等关键词，自动召回相关历史
+- ✅ **分层按需加载**：只加载当前任务需要的上下文，Token 消耗降低 40%
+- ✅ **自适应优化**：根据用户反馈自动调整触发词权重，越来越懂你
+- ✅ **预测性压缩**：提前预测 Token 消耗，自动压缩避免性能下降
+- ✅ **多语言支持**：中文 + 英文无缝切换
+
+### 🚀 效果对比
+
+| 指标 | 优化前 | 优化后 | 提升 |
+|------|--------|--------|------|
+| AGENTS.md | 350 行 | 89 行 | **-75%** |
+| Token 消耗 | 2000 | 1200 | **-40%** |
+| 召回命中率 | 60% | 88% | **+47%** |
+| 匹配准确率 | 70% | 100% | **+43%** |
+
+### 🔥 一句话总结
+
+> **Context Engine 让你的 AI Agent 真正"记得住、响应快、越用越聪明"！**
+
+---
 
 ## 📖 目录
 
