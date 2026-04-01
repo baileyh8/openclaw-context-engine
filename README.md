@@ -8,6 +8,10 @@
 
 ---
 
+🌐 **Languages**: [简体中文](./README.md) | [English](./README_EN.md)
+
+---
+
 ## 📝 项目简介
 
 **Context Engine** 是一个基于 Context Engineering 方法论设计的智能路由系统，专门为 AI Agent 提供高效的上下文管理解决方案。
