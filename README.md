@@ -772,10 +772,10 @@ MIT License - 详见 [LICENSE](LICENSE)
 
 ## 👨‍💻 作者
 
-**Yemin**
+**baileyh8**
 
-- GitHub: [@yemin](https://github.com/yemin)
-- Email: yemin@example.com
+- GitHub: [@baileyh8](https://github.com/baileyh8)
+- Email: baileyh8@gmail.com
 
 ---
 
