@@ -45,6 +45,157 @@
 
 ---
 
+## 🏗️ 记忆系统架构
+
+Context Engine 是基于 **分层记忆架构** 设计的智能路由系统，支持多种记忆后端。
+
+### 📐 当前架构 (Mem0 + Qdrant)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Context Engine                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌───────────────┐    ┌───────────────┐                   │
+│  │   路由引擎    │ →  │   场景匹配    │                   │
+│  └───────────────┘    └───────────────┘                   │
+│                              ↓                              │
+│  ┌─────────────────────────────────────────────────────┐  │
+│  │                   分层记忆系统                         │  │
+│  ├─────────────────────────────────────────────────────┤  │
+│  │  L1: 当前上下文 (对话历史)                           │  │
+│  │  L2: Mem0 长期记忆 (语义搜索)                       │  │
+│  │  L3: Qdrant 向量记忆 (相似度检索)                   │  │
+│  │  L4: 本地结构化文档 (按需读取)                     │  │
+│  └─────────────────────────────────────────────────────┘  │
+│                              ↓                              │
+│  ┌───────────────┐    ┌───────────────┐                   │
+│  │   上下文组装  │ →  │   Token 控制  │                   │
+│  └───────────────┘    └───────────────┘                   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🔧 记忆后端说明
+
+#### L1: 当前上下文
+- **存储**: OpenClaw Session (内存)
+- **容量**: 最近 10 轮对话
+- **特点**: 自动加载，无需配置
+
+#### L2: Mem0 长期记忆
+- **存储**: Mem0 Platform (云端/本地)
+- **容量**: 100 条记忆
+- **特点**: 语义搜索，支持 metadata 过滤
+- **官网**: https://mem0.ai/
+
+#### L3: Qdrant 向量记忆
+- **存储**: Qdrant (向量数据库)
+- **容量**: 1000 向量
+- **特点**: 语义相似度检索，高性能
+- **官网**: https://qdrant.tech/
+
+#### L4: 本地结构化文档
+- **存储**: 本地 Markdown 文件
+- **容量**: 无限制
+- **特点**: 完全可控，可编辑
+- **文件**: HEARTBEAT.md、.learnings/ 等
+
+### 🔄 适配其他记忆架构
+
+如果你想使用其他记忆系统，只需修改 L2 和 L3 的实现即可。
+
+#### 适配示例 1: 使用 LangChain Memory
+
+```javascript
+// 替换 L2: Mem0 → LangChain Memory
+const { MemoryVectorStore } = require("langchain/memory");
+
+class LangChainL2 extends MemoryVectorStore {
+    async search(query, options) {
+        // 使用 LangChain 的向量搜索
+        const results = await this.similaritySearch(query, options.limit);
+        return results;
+    }
+}
+```
+
+#### 适配示例 2: 使用 Pinecone 向量数据库
+
+```javascript
+// 替换 L3: Qdrant → Pinecone
+const { Pinecone } = require("@pinecone-database/pinecone");
+
+class PineconeL3 {
+    constructor(apiKey, indexName) {
+        this.pinecone = new Pinecone({ apiKey });
+        this.index = this.pinecone.Index(indexName);
+    }
+
+    async search(query, limit = 5) {
+        const results = await this.index.query({
+            queryVector: await embed(query),
+            topK: limit
+        });
+        return results.matches;
+    }
+}
+```
+
+#### 适配示例 3: 使用本地 SQLite + FTS5
+
+```javascript
+// 替换 L2+L3: 使用本地 SQLite
+const Database = require('better-sqlite3');
+
+class SQLiteMemory {
+    constructor(dbPath) {
+        this.db = new Database(dbPath);
+        this.db.exec(`
+            CREATE VIRTUAL TABLE IF NOT EXISTS memory 
+            USING fts5(content, metadata);
+        `);
+    }
+
+    async search(query, limit = 5) {
+        const stmt = this.db.prepare(`
+            SELECT content, metadata, rank 
+            FROM memory 
+            WHERE memory MATCH ?
+            ORDER BY rank
+            LIMIT ?
+        `);
+        return stmt.all(query, limit);
+    }
+
+    async store(text, metadata) {
+        const stmt = this.db.prepare(`
+            INSERT INTO memory (content, metadata) VALUES (?, ?)
+        `);
+        stmt.run(text, JSON.stringify(metadata));
+    }
+}
+```
+
+### 📋 适配检查清单
+
+适配新的记忆系统时，确保支持以下功能：
+
+- [ ] **语义搜索**: 能够根据文本内容找到相关记忆
+- [ ] **元数据过滤**: 支持 metadata 条件筛选
+- [ ] **相似度排序**: 返回结果带有相关性分数
+- [ ] **增量更新**: 支持添加新记忆
+- [ ] **持久化存储**: 数据不会丢失
+
+### 🔗 相关资源
+
+- [Mem0 文档](https://docs.mem0.ai/)
+- [Qdrant 文档](https://qdrant.tech/documentation/)
+- [OpenClaw Memory](https://docs.openclaw.ai/memory)
+- [LangChain Memory](https://python.langchain.com/docs/modules/memory/)
+
+---
+
 ## 📖 目录
 
 - [特性](#-特性)
