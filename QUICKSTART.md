@@ -1,5 +1,7 @@
 # 🚀 快速开始指南
 
+🌐 **Languages**: [简体中文](./QUICKSTART.md) | [English](./QUICKSTART_EN.md)
+
 ## 5 分钟快速上手
 
 ### 第一步：克隆项目 (30秒)

@@ -1,114 +1,112 @@
-# 🏗 架构设计
+# 🏗 Architecture Design
 
-🌐 **Languages**: [简体中文](./architecture.md) | [English](./architecture_EN.md)
-
-## 整体架构
+## Overall Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                     Context Engine 架构                              │
+│                     Context Engine Architecture                       │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  ┌───────────────┐    ┌───────────────┐    ┌───────────────┐       │
-│  │   用户输入     │ →  │   路由引擎     │ →  │   场景匹配     │       │
+│  │   User Input  │ →  │ Router Engine │ →  │Scenario Match │       │
 │  └───────────────┘    └───────────────┘    └───────────────┘       │
 │                                                                     │
 │                              ↓                                      │
 │                                                                     │
 │  ┌─────────────────────────────────────────────────────────────┐    │
-│  │                      分层记忆系统                             │    │
+│  │                      Layered Memory System                   │    │
 │  ├─────────────────────────────────────────────────────────────┤    │
-│  │  L1: 对话历史  │  L2: Mem0  │  L3: Qdrant  │  L4: 本地文件  │    │
+│  │ L1: History │ L2: Mem0 │ L3: Qdrant │ L4: Local Files │    │
 │  └─────────────────────────────────────────────────────────────┘    │
 │                              ↓                                      │
 │                                                                     │
 │  ┌───────────────┐    ┌───────────────┐    ┌───────────────┐       │
-│  │   上下文组装   │ →  │   Token 控制  │ →  │   输出上下文   │       │
+│  │Context Assemble│ → │Token Control  │ →  │Output Context │       │
 │  └───────────────┘    └───────────────┘    └───────────────┘       │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-## 核心组件
+## Core Components
 
-### 1. 路由引擎 (Router Engine)
+### 1. Router Engine
 
-负责：
-- 语言检测
-- 触发词提取
-- 权重计算
-- 场景匹配
-- 优先级排序
+Responsibilities:
+- Language detection
+- Trigger extraction
+- Weight calculation
+- Scenario matching
+- Priority sorting
 
-文件：`tools/router.js`
+File: `tools/router.js`
 
-### 2. 记忆系统 (Memory System)
+### 2. Memory System
 
-负责：
-- L1: 对话历史管理
-- L2: Mem0 长期记忆
-- L3: Qdrant 向量记忆
-- L4: 本地文档加载
+Responsibilities:
+- L1: Conversation history management
+- L2: Mem0 long-term memory
+- L3: Qdrant vector memory
+- L4: Local document loading
 
-文件：`tools/memory.js`
+File: `tools/memory.js`
 
-### 3. 上下文组装器 (Context Assembler)
+### 3. Context Assembler
 
-负责：
-- 合并各层结果
-- 智能去重
-- Token 控制
-- 压缩优化
+Responsibilities:
+- Merge layer results
+- Smart deduplication
+- Token control
+- Compression optimization
 
-文件：`tools/assembler.js`
+File: `tools/assembler.js`
 
-### 4. 自适应优化器 (Adaptive Optimizer)
+### 4. Adaptive Optimizer
 
-负责：
-- 反馈分析
-- 权重调整
-- 性能监控
+Responsibilities:
+- Feedback analysis
+- Weight adjustment
+- Performance monitoring
 
-文件：`tools/adaptive-weight.js`
+File: `tools/adaptive-weight.js`
 
-### 5. 预测引擎 (Prediction Engine)
+### 5. Prediction Engine
 
-负责：
-- Token 消耗预测
-- 趋势分析
-- 压缩决策
+Responsibilities:
+- Token consumption prediction
+- Trend analysis
+- Compression decisions
 
-文件：`tools/predictive.js`
+File: `tools/predictive.js`
 
-## 数据流
+## Data Flow
 
 ```
-用户输入
+User Input
     ↓
-语言检测 (detectLanguage)
+Language Detection (detectLanguage)
     ↓
-触发词提取 (extractKeywords)
+Trigger Extraction (extractKeywords)
     ↓
-权重计算 (calculateWeights)
+Weight Calculation (calculateWeights)
     ↓
-场景匹配 (matchScenario)
+Scenario Matching (matchScenario)
     ↓
-优先级排序 (sortByPriority)
+Priority Sorting (sortByPriority)
     ↓
-分层加载 (loadByLayers)
+Layered Loading (loadByLayers)
     ↓
-上下文组装 (assembleContext)
+Context Assembly (assembleContext)
     ↓
-Token 控制 (controlTokens)
+Token Control (controlTokens)
     ↓
-压缩优化 (compressIfNeeded)
+Compression Optimization (compressIfNeeded)
     ↓
-输出上下文
+Output Context
 ```
 
-## 配置管理
+## Configuration Management
 
-### 分层配置
+### Layer Configuration
 
 ```javascript
 const LAYER_CONFIG = {
@@ -129,12 +127,12 @@ const LAYER_CONFIG = {
     },
     L4: {
         autoLoad: false,
-        triggerKeywords: ['heartbeat', '检查', '记忆']
+        triggerKeywords: ['heartbeat', 'check', 'memory']
     }
 };
 ```
 
-### 场景配置
+### Scenario Configuration
 
 ```javascript
 const SCENARIO_CONFIG = {
@@ -159,16 +157,16 @@ const SCENARIO_CONFIG = {
 };
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 1. 缓存策略
+### 1. Caching Strategy
 
-- L1: 内存缓存，自动过期
-- L2: Mem0 缓存，TTL 24h
-- L3: Qdrant 缓存，TTL 1h
-- L4: 文件缓存，按需加载
+- L1: Memory cache, auto-expire
+- L2: Mem0 cache, TTL 24h
+- L3: Qdrant cache, TTL 1h
+- L4: File cache, on-demand
 
-### 2. 异步加载
+### 2. Async Loading
 
 ```javascript
 async function loadByLayers(routing) {
@@ -183,7 +181,7 @@ async function loadByLayers(routing) {
 }
 ```
 
-### 3. 智能去重
+### 3. Smart Deduplication
 
 ```javascript
 function deduplicate(results) {
@@ -197,18 +195,18 @@ function deduplicate(results) {
 }
 ```
 
-## 监控体系
+## Monitoring System
 
-### 性能指标
+### Performance Metrics
 
-| 指标 | 采集方式 | 告警阈值 |
-|------|---------|---------|
-| Token 消耗 | 实时统计 | > 2000 |
-| 召回命中率 | 用户反馈 | < 85% |
-| 加载时间 | 计时统计 | > 1000ms |
-| 场景匹配 | 自动验证 | < 95% |
+| Metric | Collection | Alert Threshold |
+|--------|------------|----------------|
+| Token Consumption | Real-time stats | > 2000 |
+| Recall Hit Rate | User feedback | < 85% |
+| Load Time | Timing stats | > 1000ms |
+| Scenario Match | Auto validation | < 95% |
 
-### 日志记录
+### Logging
 
 ```javascript
 function logPerformance(metrics) {
@@ -230,34 +228,34 @@ function logPerformance(metrics) {
 }
 ```
 
-## 扩展性
+## Extensibility
 
-### 添加新场景
+### Adding New Scenarios
 
 ```javascript
 SCENARIOS.new_scenario = {
-    triggers: ['新触发词'],
+    triggers: ['new trigger'],
     priority: ['L1', 'L2', 'L3'],
     limits: { L2: 5, L3: 3 }
 };
 ```
 
-### 添加新层级
+### Adding New Layers
 
 ```javascript
 LAYERS.L5 = {
     name: 'External API',
     load: async (routing) => {
-        // 自定义加载逻辑
+        // Custom loading logic
     }
 };
 ```
 
-### 自定义路由策略
+### Custom Routing Strategy
 
 ```javascript
 async function customRoute(input) {
-    // 自定义路由逻辑
+    // Custom routing logic
     const routing = {
         scenario: 'custom',
         priority: ['L1', 'L5', 'L2'],
@@ -268,16 +266,16 @@ async function customRoute(input) {
 }
 ```
 
-## 安全性
+## Security
 
-### 数据隔离
+### Data Isolation
 
-- L1: 会话级隔离
-- L2: 用户级隔离
-- L3: 租户级隔离
-- L4: 项目级隔离
+- L1: Session-level isolation
+- L2: User-level isolation
+- L3: Tenant-level isolation
+- L4: Project-level isolation
 
-### 访问控制
+### Access Control
 
 ```javascript
 function checkAccess(user, layer) {
@@ -294,5 +292,5 @@ function checkAccess(user, layer) {
 
 ---
 
-**最后更新**: 2026-04-01  
-**版本**: 1.0.0
+**Last Updated**: 2026-04-01  
+**Version**: 1.0.0

@@ -1,5 +1,7 @@
 # 🚀 GitHub 发布指南
 
+🌐 **Languages**: [简体中文](./GITHUB_GUIDE.md) | [English](./GITHUB_GUIDE_EN.md)
+
 ## 发布步骤
 
 ### 1. 创建 GitHub 仓库
